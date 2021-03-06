@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/dog.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/dog.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/dog.png">
+  <link rel="mask-icon" href="/images/dog.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"always","padding":50,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="面试向，最近一直在准备笔面试，这个问题感觉会经常问，所以我在学习的同时想输出一点东西。那么，如何进行页面性能优化？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="页面性能优化">
+<meta property="og:url" content="http://yoursite.com/2020/04/10/%E9%A1%B5%E9%9D%A2%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/index.html">
+<meta property="og:site_name" content="Lazy Bone · Blog">
+<meta property="og:description" content="面试向，最近一直在准备笔面试，这个问题感觉会经常问，所以我在学习的同时想输出一点东西。那么，如何进行页面性能优化？">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-04-10T12:46:27.000Z">
+<meta property="article:modified_time" content="2020-04-30T16:04:48.713Z">
+<meta property="article:author" content="Lazy Bone">
+<meta property="article:tag" content="web前端">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/04/10/%E9%A1%B5%E9%9D%A2%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>页面性能优化 | Lazy Bone · Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lazy Bone · Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/10/%E9%A1%B5%E9%9D%A2%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Lazy Bone">
+      <meta itemprop="description" content="记录学习、记录生活">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lazy Bone · Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          页面性能优化
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-10 20:46:27" itemprop="dateCreated datePublished" datetime="2020-04-10T20:46:27+08:00">2020-04-10</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>面试向，最近一直在准备笔面试，这个问题感觉会经常问，所以我在学习的同时想输出一点东西。那么，如何进行页面性能优化？</p>
+<a id="more"></a>
+<h2 id="一、对资源压缩合并"><a href="#一、对资源压缩合并" class="headerlink" title="一、对资源压缩合并"></a>一、对资源压缩合并</h2><p>可以使用webpack等构建工具，对资源进行打包，实现合并文件、压缩文件、混乱代码。这样能减少页面请求的次数，减小请求文件的大小，网络传输更快。</p>
+<h2 id="二、异步加载Js文件"><a href="#二、异步加载Js文件" class="headerlink" title="二、异步加载Js文件"></a>二、异步加载Js文件</h2><p>上次在QQ音乐一面的时候问到了异步加载JS文件的问题，提到了可以生成script标签，但是不懂实质。</p>
+<h3 id="为什么要异步加载JS呢？"><a href="#为什么要异步加载JS呢？" class="headerlink" title="为什么要异步加载JS呢？"></a>为什么要异步加载JS呢？</h3><p>因为加载JS会阻塞页面渲染。这涉及到浏览器的渲染过程，当页面解析时，遇到了script会去加载js文件，会阻塞生成dom树和css树，这样页面显示会慢。如果js过多，网站会因为等待js加载而不进行后续渲染。<br>所以，有些工具方法、非核心代码可以按需加载，用到再加载，也可以在window.onload页面加载完成再将script插入dom。</p>
+<h3 id="异步加载JS有三种方式："><a href="#异步加载JS有三种方式：" class="headerlink" title="异步加载JS有三种方式："></a>异步加载JS有三种方式：</h3><ol>
+<li><p>async<br>async是script标签的属性，设置之后，会异步加载script，加载完就执行。async属性仅适用于外部脚本。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"xxx.js"</span> <span class="attr">async</span>=<span class="string">"async"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>defer<br>defer也是script标签的属性，设置之后，也会异步加载script，但是会等到dom文档全部解析完才会执行，按引入顺序执行。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span> <span class="attr">src</span>=<span class="string">"xxx.js"</span> <span class="attr">defer</span>=<span class="string">"defer"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>动态生成script标签，加载脚本<br>需要的时候、或者是window.onload页面加载完成再将script插入dom。<br>异步加载js，设置了src就开始异步下载(不阻塞)，插入dom才会执行script内容</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">loadScript</span>(<span class="params">url, callback</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> script = <span class="built_in">document</span>.createElement(<span class="string">'script'</span>);</span><br><span class="line">    script.src = url;</span><br><span class="line">    script.onload = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        callback();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">document</span>.body.appendChild(script);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">window</span>.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;  </span><br><span class="line">    loadJs(<span class="string">'https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js'</span>,<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log($());</span><br><span class="line">    &#125;) </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="三、利用浏览器缓存"><a href="#三、利用浏览器缓存" class="headerlink" title="三、利用浏览器缓存"></a>三、利用浏览器缓存</h2><p>浏览器缓存分为：强缓存和协商缓存。<br>强缓存优先于协商缓存，若强缓存过期了，则进行协商缓存。</p>
+<h3 id="强缓存"><a href="#强缓存" class="headerlink" title="强缓存"></a>强缓存</h3><p>强缓存判断缓存是否过期，如果缓存没过期，则直接使用强缓存。但是这样可能导致文件不是服务期最新的内容。<br><strong>相关Http首部信息:</strong><br><strong>Expires</strong><br>是http1.0的产物，记录的是缓存过期的绝对时间，是一个GMT日期（格林威治时间）。</p>
+<p><strong>Cache-Control</strong><br>是http1.1的产物，优先级高于Expires，记录的是从响应的时间开始有效期的相对时间，单位是秒（600s = 10min）。频繁改动的文件，可以设置<code>cache-control: no-cache</code><br>可以在控制台的network看到这两个首部字段</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">expires</span>: Fri, 10 Apr 2020 15:10:33 GMT</span><br><span class="line"><span class="attribute">cache-control</span>: max-age=600</span><br></pre></td></tr></table></figure>
+
+<h3 id="协商缓存"><a href="#协商缓存" class="headerlink" title="协商缓存"></a>协商缓存</h3><p>如果需要知道服务器资源是否更新，就需要协商缓存。<br>服务器第一次返回资源时，带上资源修改信息。客户端再次请求资源时，携带上这些信息。如果命中协商缓存，服务器则返回http状态码304 Not Modified，让客户端使用原来的缓存。如果资源修改了，则返回<br><strong>相关Http首部信息:</strong><br><strong>last-modified 和 if-modified-since</strong><br>过程：服务器第一次将资源发送给客户端时，http首部带一个last-modified字段，值是GMT时间，代表着资源上次改动是什么时候。客户端下次请求资源时，带上If-Modified-Since。服务器对比修改时间，如果两个最终修改时间一致，则返回http状态码304 Not Modified，让客户端使用原来的缓存。<br><strong>etag 和 if-none-match</strong><br>etag的值是通过文件生成的hash值，文件改动hash值则会变。</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">etag</span>: W/"5e908498-5a98"</span><br><span class="line"><span class="attribute">last-modified</span>: Fri, 10 Apr 2020 14:37:12 GMT</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="四、使用CDN"><a href="#四、使用CDN" class="headerlink" title="四、使用CDN"></a>四、使用CDN</h2><p>CDN (Content Delivery Network) 内容分发网络，（我还记得我teg一面这个cdn都回答不好）使用浏览器缓存可以提升用户二次访问的速度，而使用cdn还可以提升用户首次访问的速度。<br>通过将静态资源（js、css、图片等）缓存到CDN节点上，CDN系统根据用户距离、响应速度、网络情况等等综合考虑，将用户请求重新导向最佳的CDN节点上，以达到提升用户访问速度，还能节省服务器的带宽消耗。</p>
+<h2 id="五、预解析DNS"><a href="#五、预解析DNS" class="headerlink" title="五、预解析DNS"></a>五、预解析DNS</h2><p>如果页面在未来要向某个url获取资源，可以让浏览器预解析DNS，这样真正获取资源的时候，就省去了等待dns解析的时间。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"dns-prefetch"</span> <span class="attr">href</span>=<span class="string">"url"</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="六、防抖和节流"><a href="#六、防抖和节流" class="headerlink" title="六、防抖和节流"></a>六、防抖和节流</h2><p>可以看我关于防抖和节流的文章 - <a href="https://ma-cherie.github.io/2020/04/10/%E9%98%B2%E6%8A%96%E5%92%8C%E8%8A%82%E6%B5%81/" target="_blank" rel="noopener">防抖和节流</a></p>
+<h2 id="七、懒加载和预加载"><a href="#七、懒加载和预加载" class="headerlink" title="七、懒加载和预加载"></a>七、懒加载和预加载</h2><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>性能优化的点应该有很多，我先准备这些来回答面试吧，而且每个点深入进去也可以学很久…其实说起来，也并非只是为了面试，之前用Vue做的网站也是加载很慢，现在大概明白为什么了。<br>也许后续还会根据不同的方面，把以上提到的点重新分类一下。</p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://segmentfault.com/a/1190000016745587#item-3" target="_blank" rel="noopener">页面性能优化办法有哪些</a><br><a href="https://segmentfault.com/a/1190000017004307" target="_blank" rel="noopener">深入理解浏览器的缓存机制</a><br><a href="https://juejin.im/post/5c188d06f265da615114acb0#heading-2" target="_blank" rel="noopener">趣讲CDN</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag"><i class="fa fa-tag"></i> web前端</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/09/%E5%89%8D%E8%A8%80-%20%E7%AC%AC%E4%BA%8C%E6%AC%A1%E6%90%AD%E5%BB%BAHexo%E5%8D%9A%E5%AE%A2/" rel="prev" title="前言 - 第二次搭建Hexo博客">
+      <i class="fa fa-chevron-left"></i> 前言 - 第二次搭建Hexo博客
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/10/%E9%98%B2%E6%8A%96%E5%92%8C%E8%8A%82%E6%B5%81/" rel="next" title="防抖和节流">
+      防抖和节流 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、对资源压缩合并"><span class="nav-number">1.</span> <span class="nav-text">一、对资源压缩合并</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、异步加载Js文件"><span class="nav-number">2.</span> <span class="nav-text">二、异步加载Js文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么要异步加载JS呢？"><span class="nav-number">2.1.</span> <span class="nav-text">为什么要异步加载JS呢？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步加载JS有三种方式："><span class="nav-number">2.2.</span> <span class="nav-text">异步加载JS有三种方式：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、利用浏览器缓存"><span class="nav-number">3.</span> <span class="nav-text">三、利用浏览器缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#强缓存"><span class="nav-number">3.1.</span> <span class="nav-text">强缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#协商缓存"><span class="nav-number">3.2.</span> <span class="nav-text">协商缓存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、使用CDN"><span class="nav-number">4.</span> <span class="nav-text">四、使用CDN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、预解析DNS"><span class="nav-number">5.</span> <span class="nav-text">五、预解析DNS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六、防抖和节流"><span class="nav-number">6.</span> <span class="nav-text">六、防抖和节流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#七、懒加载和预加载"><span class="nav-number">7.</span> <span class="nav-text">七、懒加载和预加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文章"><span class="nav-number">9.</span> <span class="nav-text">参考文章</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Lazy Bone"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Lazy Bone</p>
+  <div class="site-description" itemprop="description">记录学习、记录生活</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Ma-cherie" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Ma-cherie" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:240710290@qq.com" title="E-Mail → mailto:240710290@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lazy Bone</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
